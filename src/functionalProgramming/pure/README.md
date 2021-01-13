@@ -1,0 +1,1 @@
+# 자바에서 기본으로 제공해주는 Functional Interface
