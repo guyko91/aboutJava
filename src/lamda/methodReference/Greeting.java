@@ -9,6 +9,10 @@ public class Greeting {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String hello(String name) {
         return "hello " + name;
     }
