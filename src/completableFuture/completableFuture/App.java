@@ -1,5 +1,7 @@
 package completableFuture.completableFuture;
 
+import java.util.concurrent.*;
+
 public class App {
 
     // Completable Future
@@ -10,7 +12,57 @@ public class App {
     //  - 여러 Future를 조합할 수 없다. 예) Event 정보 가져온 다음 Event에 참석하는 회원 목록 가져오기.
     //  - 예외 처리용 API를 제공하지 않는다.
 
-    public static void main(String[] args) {
-        
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+
+        // Type1
+        CompletableFuture<String> future = new CompletableFuture<>();
+        future.complete("keesun");
+        System.out.println(future.get());
+
+        // Type2
+        CompletableFuture<String> future2 = CompletableFuture.completedFuture("guyko");
+        System.out.println(future2.get());
+
+        // 리턴이 없는 작업.
+        CompletableFuture<Void> future3 = CompletableFuture.runAsync(() -> {
+            System.out.println("Hello " + Thread.currentThread().getName());
+        });
+        System.out.println(future3.get());
+
+        // 리턴이 있는 작업.
+        CompletableFuture<String> future4 = CompletableFuture.supplyAsync(() -> {
+            System.out.println("Hello " + Thread.currentThread().getName());
+            return "Hello";
+        });
+        System.out.println(future4.get());
+
+        // 콜백을 주는 방법.
+        CompletableFuture<String> future5 = CompletableFuture.supplyAsync(() -> {
+            System.out.println("Hello " + Thread.currentThread().getName());
+            return "Hello";
+        }).thenApply((s) -> {
+            System.out.println(Thread.currentThread().getName());
+            return s.toUpperCase();
+        });
+        System.out.println(future5.get());
+
+        // 리턴이 없는 콜백의 경우.
+        CompletableFuture<Void> future6 = CompletableFuture.supplyAsync(() -> {
+            System.out.println("Hello " + Thread.currentThread().getName());
+            return "Hello";
+        }).thenAccept((s) -> {
+            System.out.println(Thread.currentThread().getName());
+            System.out.println(s.toUpperCase());
+        });
+        System.out.println(future6.get());
+
+//        CompletableFuture<Void> future7 = CompletableFuture.supplyAsync(() -> {
+//            System.out.println("Hello " + Thread.currentThread().getName());
+//            return "Hello";
+//        }).thenru((s) -> {
+//            System.out.println(Thread.currentThread().getName());
+//            System.out.println(s.toUpperCase());
+//        });
+//        System.out.println(future6.get());
     }
 }
